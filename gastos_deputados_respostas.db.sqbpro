@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/victo/Downloads/gastos_deputados.db" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><current_tab id="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="1246"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="gastos"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="gastos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk=""><sort/><column_widths/><filter_values/><display_formats/><hidden_columns/><plot_y_axes/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">/*
+1)Quanto cada deputado gastou de 2016 a 2018, separado por ano?
+2)Qual é o valor médio da nota fiscal de cada deputado, para cada
+categoria de despesa, de 2016 a 2018?
+3)No ano de 2019, qual mês teve maior gasto? E por categoria e mês?
+4)Quais os cinco CPFs ou CNPJs que mais receberam valores em 2019?
+*/
+
+-- 1)
+SELECT 	nm_deputado as NOME 
+		,nr_ano     AS ANO   
+		,sum(nr_valor) AS VALOR_TOTAL_GASTO
+FROM gastos
+WHERE ANO IN(2016,2017,2018)
+group by nm_deputado,nr_ano
+order by NOME,ANO
+
+--2)
+SELECT 	nm_deputado as NOME 
+		,tp_categoria  AS CATEGORIA   
+		,avg(nr_valor) AS VALOR_MEDIO_GASTO
+FROM gastos
+WHERE nr_ano(2016,2017,2018)
+group by nm_deputado,CATEGORIA
+order by NOME,CATEGORIA
+
+--3/1) categoria
+SELECT 	nr_mes as MES
+		,sum(nr_valor) as VALOR_TOTAL_GASTO
+from gastos
+where nr_ano = 2019
+group by nr_mes
+order by VALOR_TOTAL_GASTO DESC
+
+--3/2) categoria e mes
+SELECT 	tp_categoria as CATEGORIA
+		,nr_mes as MES
+		,sum(nr_valor) as VALOR_TOTAL_GASTO
+from gastos
+where nr_ano = 2019
+group by CATEGORIA,MES
+order by CATEGORIA,MES
+
+--4)
+SELECT 	nr_cnpj 		AS CNPJ
+		,nm_deputado	AS NOME
+		,sum(nr_valor) 	AS VALOR_TOTAL_GASTO
+FROM gastos 
+WHERE nr_ano= 2019
+GROUP BY CNPJ
+ORDER BY VALOR_TOTAL_GASTO DESC LIMIT 5
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
