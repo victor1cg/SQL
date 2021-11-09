@@ -60,3 +60,42 @@ Austin  Marvin	2		$700	$1300
 Austin	John	3		$600	$600			
 
 Chicago	jose	1		$300	$600		
+
+---------- Insert
+
+Create Table #temp_employees (
+Name varchar(30),
+Age int,
+Role varchar (30))
+
+Insert into #temp_Employees (
+('Zack', 24, 'Analyst'),
+('Joe' , 55, 'Director'),
+('Melissa', 30, 'Doctor - Fired')
+
+Select TRIM(Name) - ltrim - 
+Select replace(name, '- Fired','')
+Select substring( value , 1,3) 		- START EM 1 AND FINISH 3
+
+------------- PROCEDURE
+
+CREATE PROCEDURE Test
+AS
+Select * from Employee_HR  		- Simple as that
+
+EXEC Test				- Run the PROCEDURE
+
+-- GOOD EXAMPLE - I can run a procedure using a filter, example with jobtitle
+
+ALTER PROCEDURE Find_Role
+@JobTitle nvarchar(100)
+AS 
+.... commands
+WHERE job_title = @JobTitle
+
+EXEC Find_Role @Job_Title = 'Salesman'
+
+
+
+
+
