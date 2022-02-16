@@ -64,3 +64,37 @@ Marks
 FROM Students s JOIN Grades g
 ON s.Marks BETWEEN Min_Mark and Max_Mark
 ORDER BY Grade DESC, Name
+
+
+--- TEMP TABLES  ---
+
+with t1 as (SELECT
+    s.hacker_id, 
+    s.challenge_id,
+    s.score as s_score,
+    d.score as d_score
+    FROM submissions s
+JOIN Challenges c
+on s.challenge_id = c.challenge_id
+JOIN Difficulty d
+on c.difficulty_level = d.difficulty_level)
+
+SELECT 
+    h.hacker_id, h.name
+FROM Hackers h
+JOIN t1
+on h.hacker_id = t1.hacker_id
+WHERE t1.s_score >= t1.d_score
+
+--- CASE (TRIANGLES) ---
+
+SELECT *,
+CASE
+    WHEN (A + B < C) OR (B+C < A) OR (C+A < B) THEN "Not A Triangle"
+    WHEN A = B AND B = C THEN "Equilateral"
+    WHEN (A = B AND B !=C) OR (A=C AND B!=A) THEN "Isosceles" 
+    WHEN A!= B AND B!= C AND C!=A THEN "Scalene"
+END
+FROM TRIANGLES
+
+
