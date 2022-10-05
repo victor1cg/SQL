@@ -97,4 +97,23 @@ CASE
 END
 FROM TRIANGLES
 
+--- USING DATE (from_unixtime) ---
+--Buscar o primeiro e o ultimo dia | So Funciona com time stamp.
 
+SELECT
+from_unixtime(min(first_timestamp), "d MMMM y") First_Date,
+from_unixtime(max(last_timestamp), "d MMMM y") Last_Date
+FROM
+intro_to_databricks_sql_gym_logs;
+
+--buscar a media de tempo na academia
+
+SELECT
+from_unixtime(first_timestamp, "dd") as day,
+avg((last_timestamp - first_timestamp) / 60) as avg_time
+FROM
+intro_to_databricks_sql_gym_logs
+group by
+day
+ORDER BY
+from_unixtime(first_timestamp, "dd");
