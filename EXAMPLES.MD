@@ -1,6 +1,5 @@
 ### --- PRINT THE THIRD TRANSACTION OF EACH USER --
 
-
 `with t1 as (
 SELECT user_id ,
 created_date,
@@ -113,11 +112,11 @@ intro_to_databricks_sql_gym_logs;`
 ---  Buscar a media de tempo na academia
 
 `SELECT
-from_unixtime(first_timestamp, "dd") as day,
-avg((last_timestamp - first_timestamp) / 60) as avg_time
+from_unixtime(first_timestamp, "dd") as day,`  
+`avg((last_timestamp - first_timestamp) / 60) as avg_time
 FROM
-intro_to_databricks_sql_gym_logs
-group by
+intro_to_databricks_sql_gym_logs` 
+`group by
 day
 ORDER BY
 from_unixtime(first_timestamp, "dd");`
@@ -136,10 +135,36 @@ Pode ser definida como uma tabela virtual, aonde armazenamos a consulta.
 
 **Reuso**: as views são objetos de caráter permanente. 
 
-`CREATE VIEW name_view AS
- SELECT * FROM TABLE WHERE customer = 'Person'`
+`CREATE VIEW name_view AS`  
+`SELECT * FROM TABLE WHERE customer = 'Person'`
 
-`CREATE OR ALTER VIEW name_view AS
+`CREATE OR ALTER VIEW name_view AS  
  SELECT * FROM TABLE WHERE customer = 'Company'`
 
 `DELETE VIEW name_view`
+
+### **---  TRIGGER ---** 
+Fiscal do SQL, e sempre sera disparado a depender do evento;
+
+```
+CREATE OR REPLACE TRIGGER nome_tg
+BEFORE INSERT OR UPDATE OR DELETE
+ON Tabela
+*codigo*
+```
+> Ex: Trigger disparada antes de Insert na tabela Employees, caso seja SAB ou DOM a query deverá ser abortada.
+
+```
+
+CREATE OR ALTER TRIGGER TG_EMPLYEES_BEFORE_INSERT_ALTER
+ON [dbo].[TABLE_TEST_VICTOR]
+FOR INSERT, UPDATE
+AS
+BEGIN
+    IF TRIM(DATENAME(WEEKDAY,GETDATE())) = 'Wednesday'
+        RAISERROR('NAO PERMITIDO HOJE',0,1)
+END
+```
+### **---  SEQUENCE ---** 
+São objetos usado para gerar valores de auto numeração, onde podemos definir os valores iniciais e seus incrementos.  
+`SELECT current_value FROM sys.sequences WHERE name = 'OrderNumberSequence' ;`
